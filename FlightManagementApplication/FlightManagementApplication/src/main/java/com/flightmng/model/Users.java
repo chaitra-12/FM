@@ -35,6 +35,7 @@ public class Users {
 	@Size(min = 8, max = 15)
 	private String userPassword;
 	
+	@Column(unique=true)
 	@Pattern(regexp="\\d{10}")
 	private String userPhone;
 	
