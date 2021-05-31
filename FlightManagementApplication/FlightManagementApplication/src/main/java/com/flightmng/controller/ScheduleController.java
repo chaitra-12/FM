@@ -29,24 +29,24 @@ public class ScheduleController {
 	@Autowired
 	AirportService airportService;
 	
-	@DeleteMapping("/deleteschedule/{id}")
+	@DeleteMapping("/deleteSchedule/{id}")
 	@ExceptionHandler(RecordNotFoundException.class)
 	public void removeAirport(@PathVariable("id") BigInteger id) {
 		scheduleService.removeSchedule(id);
 	}
 	
-	@GetMapping("/viewschedule/{id}")
+	@GetMapping("/viewSchedule/{id}")
 	@ExceptionHandler(RecordNotFoundException.class)
 	public Schedule viewAirport(@PathVariable("id") BigInteger id) {
 		return scheduleService.viewSchedule(id);
 	}
 	
-	@GetMapping("/allschedules")
+	@GetMapping("/allSchedules")
 	public Iterable<Schedule> viewAllAirport() {
 		return scheduleService.viewAllSchedules();
 	}
 	
-	@PostMapping("/addschedule")
+	@PostMapping("/addSchedule")
 	public ResponseEntity<Schedule> AddSchedule(@RequestBody Schedule schedule) {
 		try {
 			return new ResponseEntity<Schedule>(scheduleService.addSchedule(schedule),

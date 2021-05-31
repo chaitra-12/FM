@@ -4,11 +4,13 @@ import java.math.BigInteger;
 
 import org.springframework.http.ResponseEntity;
 
+import com.flightmng.exceptions.BookingException;
+import com.flightmng.exceptions.ValidatePassengerException;
 import com.flightmng.model.Booking;
 
 public interface BookingService {
 
-	public ResponseEntity<?> createBooking(Booking newBooking);
+	public Booking createBooking(Booking newBooking) throws BookingException;
 
 	public Booking updateBooking(Booking newBooking);
 

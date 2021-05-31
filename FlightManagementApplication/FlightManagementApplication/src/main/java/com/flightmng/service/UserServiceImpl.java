@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import com.flightmng.dao.UserDao;
 import com.flightmng.exceptions.RecordAlreadyPresentException;
 import com.flightmng.exceptions.RecordNotFoundException;
+import com.flightmng.exceptions.ValidateUserException;
 import com.flightmng.model.Users;
+import com.flightmng.util.FlightConstants;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -21,19 +23,26 @@ public class UserServiceImpl implements UserService {
 	UserDao userDao;
 	
 	@Override
-	public ResponseEntity<?> createUser(Users newUser) {
-		Optional<Users> findUserById = userDao.findById(newUser.getUserId());
-		try {
-			if (!findUserById.isPresent()) {
-				userDao.save(newUser);
-				return new ResponseEntity<Users>(newUser, HttpStatus.OK);
-			} else
-				throw new RecordAlreadyPresentException(
-						"User with Id: " + newUser.getUserId() + " already exists!!");
-		} catch (RecordAlreadyPresentException e) {
-
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public Users createUser(Users newUser) throws ValidateUserException {
+		validateUser(newUser);
+		return userDao.save(newUser);
+	}
+	private boolean validateUser(Users users) throws ValidateUserException {
+		if (!users.getUserName().matches("[A-Za-z]+")) {
+			throw new ValidateUserException(FlightConstants.USERNAME_CANNOT_BE_EMPTY);
 		}
+		if (!users.getUserPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
+			throw new ValidateUserException(FlightConstants.PASSWORD_CANNOT_BE_EMPTY);
+		}
+		String userPhoneNumber = Long.toString(users.getUserPhone());
+		
+		if (!userPhoneNumber.matches("^[6-9][0-9]{9}")) {
+			throw new ValidateUserException(FlightConstants.MOBILENUMBER_CANNOT_BE_EMPTY);
+		}
+		if (!users.getUserEmail().matches("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")) {
+			throw new ValidateUserException(FlightConstants.EMAIL_CANNOT_BE_EMPTY);
+		}
+		return true;
 	}
 
 	@Override

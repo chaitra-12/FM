@@ -1,6 +1,7 @@
 package com.flightmng.service;
 
 import java.math.BigInteger;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.flightmng.dao.BookingDao;
+import com.flightmng.exceptions.BookingException;
 import com.flightmng.exceptions.RecordAlreadyPresentException;
 import com.flightmng.exceptions.RecordNotFoundException;
+import com.flightmng.exceptions.ValidatePassengerException;
+import com.flightmng.exceptions.ValidateUserException;
 import com.flightmng.model.Booking;
+import com.flightmng.model.Flight;
+import com.flightmng.model.Passenger;
+import com.flightmng.model.Users;
+import com.flightmng.util.FlightConstants;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -20,27 +28,33 @@ public class BookingServiceImpl implements BookingService {
 	 * Creating DAO object
 	 */
 	@Autowired
+	FlightService flightService;
+	@Autowired
 	BookingDao bookingDao;
 
 	/*
 	 * making new Booking
 	 */
 	@Override
-	public ResponseEntity<Booking> createBooking(Booking newBooking) {
+	public Booking createBooking(Booking newBooking) throws BookingException{
 
 		Optional<Booking> findBookingById = bookingDao.findById(newBooking.getBookingId());
-		try {
+		Flight flightdetails = flightService.viewFlight(newBooking.getFlight().getFlightNo());
+
 			if (!findBookingById.isPresent()) {
-				bookingDao.save(newBooking);
-				return new ResponseEntity<Booking>(newBooking, HttpStatus.OK);
+				if( newBooking.getNoOfPassengers() <= flightdetails.getSeatCapacity()) {
+					return bookingDao.save(newBooking);
+					
+				}else {
+					throw new BookingException(FlightConstants.BOOKING_ERROR);
+				
+				}
 			} else
 				throw new RecordAlreadyPresentException(
 						"Booking with Booking Id: " + newBooking.getBookingId() + " already exists!!");
-		} catch (RecordAlreadyPresentException e) {
-
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+	
 	}
+	
 
 	/*
 	 * update booking made

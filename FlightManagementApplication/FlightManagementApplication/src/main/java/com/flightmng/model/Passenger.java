@@ -28,8 +28,7 @@ public class Passenger {
 	@Column
 	private int passengerAge;
 	
-	@Column(unique=true)
-	@Size(min = 12, max = 12)
+	@Column
 	private String passengerUIN;
 	
 	@Column

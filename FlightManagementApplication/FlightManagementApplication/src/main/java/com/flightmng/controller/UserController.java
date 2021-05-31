@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flightmng.exceptions.RecordAlreadyPresentException;
 import com.flightmng.exceptions.RecordNotFoundException;
+import com.flightmng.exceptions.ValidateUserException;
 import com.flightmng.model.Users;
 import com.flightmng.service.UserService;
 
@@ -30,7 +31,7 @@ public class UserController {
 
 	@PostMapping("/createUser")
 	@ExceptionHandler(RecordAlreadyPresentException.class)
-	public void addUser(@RequestBody Users newUser) {
+	public void addUser(@RequestBody Users newUser) throws ValidateUserException {
 
 		userService.createUser(newUser);
 	}

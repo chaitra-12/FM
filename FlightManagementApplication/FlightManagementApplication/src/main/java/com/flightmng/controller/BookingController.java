@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flightmng.exceptions.BookingException;
 import com.flightmng.exceptions.RecordAlreadyPresentException;
 import com.flightmng.exceptions.RecordNotFoundException;
 import com.flightmng.model.Booking;
@@ -31,20 +32,10 @@ public class BookingController {
 
 	@PostMapping("/createBooking")
 	@ExceptionHandler(RecordAlreadyPresentException.class)
-	public void addBooking(@RequestBody Booking newBooking) {
+	public void addBooking(@RequestBody Booking newBooking) throws BookingException {
 		
 			bookingService.createBooking(newBooking);			
 	}
-	/*public ResponseEntity<Booking> addBooking(@RequestBody Booking newBooking) {
-		int noOfPassengers = newBooking.getNoOfPassengers();
-		int availableSeats = newBooking.getFlight().getSeatCapacity();
-		if(noOfPassengers <= availableSeats) {
-			bookingService.createBooking(newBooking);
-			return new ResponseEntity<Booking>(HttpStatus.OK);
-		}else {
-			return new ResponseEntity<Booking>(HttpStatus.BAD_REQUEST);
-		}
-	}*/
 
 	@GetMapping("/readAllBooking")
 	public Iterable<Booking> readAllBookings() {

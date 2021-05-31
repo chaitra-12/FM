@@ -19,18 +19,17 @@ public class Schedule {
 	@Column(name = "schedule_Id")
 	private BigInteger scheduleId;
 
-	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER)
 	private Airport srcAirport;
 
-	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER)
 	private Airport dstnAirport;
 
-	@Column(name = "departure_date")
+	@Column(name = "departure_date",unique=true)
 	private String deptDateTime;
 
-	@Column(name = "arrival_date")
-
-	private String arrDateTime;
+	@Column(name = "arrival_date",unique=true)
+    private String arrDateTime;
 
 	public Schedule() {
 

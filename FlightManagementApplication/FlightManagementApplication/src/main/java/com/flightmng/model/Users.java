@@ -28,25 +28,21 @@ public class Users {
 	private BigInteger userId;
 	
 	@Column
-	@NotNull
 	private String userName;
 	
 	@Column
-	@Size(min = 8, max = 15)
 	private String userPassword;
 	
-	@Column(unique=true)
-	@Pattern(regexp="\\d{10}")
-	private String userPhone;
+	@Column
+	private Long userPhone;
 	
 	@Column
-	@Email(message = " Enter correct email")
 	private String userEmail;
 	
 	@OneToMany(fetch = FetchType.EAGER)
 	private List<Booking> bookings;
 
-	public Users(String userName, String userPassword, String userPhone, String userEmail, String userType,
+	public Users(String userName, String userPassword,Long userPhone, String userEmail, String userType,
 			BigInteger userId) {
 		this.userName = userName;
 		this.userPassword = userPassword;
@@ -91,11 +87,11 @@ public class Users {
 		this.userPassword = userPassword;
 	}
 
-	public String getUserPhone() {
+	public Long getUserPhone() {
 		return userPhone;
 	}
 
-	public void setUserPhone(String userPhone) {
+	public void setUserPhone(Long userPhone) {
 		this.userPhone = userPhone;
 	}
 
