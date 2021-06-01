@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.flightmng.dao.ScheduleDao;
+import com.flightmng.exceptions.DateTimeException;
 import com.flightmng.exceptions.RecordNotFoundException;
 import com.flightmng.model.Schedule;
+import com.flightmng.util.FlightConstants;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService{
@@ -17,8 +19,19 @@ public class ScheduleServiceImpl implements ScheduleService{
 	ScheduleDao dao;
 	
 	@Override
-	public Schedule addSchedule(Schedule schedule) {
+	public Schedule addSchedule(Schedule schedule) throws DateTimeException {
+		validateDateTime(schedule);
 		return dao.save(schedule);
+	}
+	
+	private boolean validateDateTime(Schedule schedule) throws DateTimeException {
+		if (!schedule.getDeptDateTime().matches("\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2}")) {
+			throw new DateTimeException(FlightConstants.DATETIME_FORMAT);
+		}
+		if (!schedule.getArrDateTime().matches("\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2}")) {
+			throw new DateTimeException(FlightConstants.DATETIME_FORMAT);
+		}
+		return true;
 	}
 	
 	@Override

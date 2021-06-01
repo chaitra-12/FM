@@ -40,6 +40,7 @@ public class BookingServiceImpl implements BookingService {
 		Flight flightdetails = flightService.viewFlight(newBooking.getFlight().getFlightNo());
 
 			if (!findBookingById.isPresent()) {
+				validateDate(newBooking);
 				if(newBooking.getNoOfPassengers() <= flightdetails.getSeatCapacity()) {
 					if(newBooking.getNoOfPassengers() == newBooking.getPassengerList().size()) {
 						validatePassenger(newBooking);
@@ -56,6 +57,12 @@ public class BookingServiceImpl implements BookingService {
 				throw new RecordAlreadyPresentException(
 						"Booking with Booking Id: " + newBooking.getBookingId() + " already exists!!");
 	
+	}
+	private boolean validateDate(Booking booking) throws BookingException {
+		if (!booking.getBookingDate().matches("\\d{2}-\\d{2}-\\d{4}")) {
+			throw new BookingException(FlightConstants.DATE_FORMAT);
+		}
+		return true;
 	}
 	
 	private boolean validatePassenger(Booking booking) throws ValidatePassengerException {

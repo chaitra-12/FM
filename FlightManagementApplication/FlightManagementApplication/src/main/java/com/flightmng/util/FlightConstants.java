@@ -9,4 +9,6 @@ public class FlightConstants {
 	public static final String PASSENGERUIN_CANNOT_BE_EMPTY = "Passenger UIN cannot be empty and should contain 12 digits";
 	public static final String PASSENGERNAME_CANNOT_BE_EMPTY = "Passenger name cannot be empty and should not contain digits";
 	public static final String BOOKING_PASSENGER_ERROR = "Passenger details entered should be of size noOfpassenegers";
+	public static final String DATETIME_FORMAT = "Enter the date-time in the format DD-MM-YYYY HH:MM:SS";
+	public static final String DATE_FORMAT = "Enter the date in the format DD-MM-YYYY";
 }
