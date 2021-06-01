@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.flightmng.exceptions.BookingException;
 import com.flightmng.exceptions.RecordAlreadyPresentException;
 import com.flightmng.exceptions.RecordNotFoundException;
+import com.flightmng.exceptions.ValidatePassengerException;
 import com.flightmng.model.Booking;
 import com.flightmng.service.BookingService;
 
@@ -32,7 +33,7 @@ public class BookingController {
 
 	@PostMapping("/createBooking")
 	@ExceptionHandler(RecordAlreadyPresentException.class)
-	public void addBooking(@RequestBody Booking newBooking) throws BookingException {
+	public void addBooking(@RequestBody Booking newBooking) throws BookingException,ValidatePassengerException {
 		
 			bookingService.createBooking(newBooking);			
 	}

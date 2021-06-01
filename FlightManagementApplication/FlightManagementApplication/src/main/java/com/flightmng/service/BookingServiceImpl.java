@@ -1,7 +1,7 @@
 package com.flightmng.service;
 
 import java.math.BigInteger;
-
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +14,9 @@ import com.flightmng.exceptions.BookingException;
 import com.flightmng.exceptions.RecordAlreadyPresentException;
 import com.flightmng.exceptions.RecordNotFoundException;
 import com.flightmng.exceptions.ValidatePassengerException;
-import com.flightmng.exceptions.ValidateUserException;
 import com.flightmng.model.Booking;
 import com.flightmng.model.Flight;
 import com.flightmng.model.Passenger;
-import com.flightmng.model.Users;
 import com.flightmng.util.FlightConstants;
 
 @Service
@@ -36,14 +34,19 @@ public class BookingServiceImpl implements BookingService {
 	 * making new Booking
 	 */
 	@Override
-	public Booking createBooking(Booking newBooking) throws BookingException{
+	public Booking createBooking(Booking newBooking) throws BookingException, ValidatePassengerException{
 
 		Optional<Booking> findBookingById = bookingDao.findById(newBooking.getBookingId());
 		Flight flightdetails = flightService.viewFlight(newBooking.getFlight().getFlightNo());
 
 			if (!findBookingById.isPresent()) {
-				if( newBooking.getNoOfPassengers() <= flightdetails.getSeatCapacity()) {
-					return bookingDao.save(newBooking);
+				if(newBooking.getNoOfPassengers() <= flightdetails.getSeatCapacity()) {
+					if(newBooking.getNoOfPassengers() == newBooking.getPassengerList().size()) {
+						validatePassenger(newBooking);
+						return bookingDao.save(newBooking);
+					}else {
+						throw new BookingException(FlightConstants.BOOKING_PASSENGER_ERROR);
+					}
 					
 				}else {
 					throw new BookingException(FlightConstants.BOOKING_ERROR);
@@ -53,6 +56,20 @@ public class BookingServiceImpl implements BookingService {
 				throw new RecordAlreadyPresentException(
 						"Booking with Booking Id: " + newBooking.getBookingId() + " already exists!!");
 	
+	}
+	
+	private boolean validatePassenger(Booking booking) throws ValidatePassengerException {
+		List<Passenger> list = booking.getPassengerList();
+		for(Passenger pg: list) {
+			if (!pg.getPassengerName().matches("[A-Za-z]+")) {
+				throw new ValidatePassengerException(FlightConstants.PASSENGERNAME_CANNOT_BE_EMPTY);
+			}
+			String passengerUIN = Long.toString(pg.getPassengerUIN());
+			if (!passengerUIN.matches("^[1-9][0-9]{11}")) {
+				throw new ValidatePassengerException(FlightConstants.PASSENGERUIN_CANNOT_BE_EMPTY);
+			}
+		}
+		return true;
 	}
 	
 

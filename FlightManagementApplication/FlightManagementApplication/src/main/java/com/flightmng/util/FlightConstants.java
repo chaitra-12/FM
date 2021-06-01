@@ -7,5 +7,6 @@ public class FlightConstants {
 	public static final String PASSWORD_CANNOT_BE_EMPTY = "Password should contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
 	public static final String USERNAME_CANNOT_BE_EMPTY = "Username cannot be empty and should not contain digits";
 	public static final String PASSENGERUIN_CANNOT_BE_EMPTY = "Passenger UIN cannot be empty and should contain 12 digits";
-	public static final String PASSENGER_CANNOT_BE_EMPTY = "Passenger name cannot be empty and should not contain digits";
+	public static final String PASSENGERNAME_CANNOT_BE_EMPTY = "Passenger name cannot be empty and should not contain digits";
+	public static final String BOOKING_PASSENGER_ERROR = "Passenger details entered should be of size noOfpassenegers";
 }

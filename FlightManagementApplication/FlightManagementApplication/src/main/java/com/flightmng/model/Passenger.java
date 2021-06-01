@@ -28,8 +28,8 @@ public class Passenger {
 	@Column
 	private int passengerAge;
 	
-	@Column
-	private String passengerUIN;
+	@Column(unique=true)
+	private long passengerUIN;
 	
 	@Column
 	private Double luggage;
@@ -71,11 +71,11 @@ public class Passenger {
 		this.passengerAge = passengerAge;
 	}
 
-	public String getPassengerUIN() {
+	public long getPassengerUIN() {
 		return passengerUIN;
 	}
 
-	public void setPassengerUIN(String passengerUIN) {
+	public void setPassengerUIN(long passengerUIN) {
 		this.passengerUIN = passengerUIN;
 	}
 

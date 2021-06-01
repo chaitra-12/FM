@@ -10,7 +10,7 @@ import com.flightmng.model.Booking;
 
 public interface BookingService {
 
-	public Booking createBooking(Booking newBooking) throws BookingException;
+	public Booking createBooking(Booking newBooking) throws BookingException,ValidatePassengerException;
 
 	public Booking updateBooking(Booking newBooking);
 
